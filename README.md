@@ -1,46 +1,71 @@
-# Astro Starter Kit: Basics
+# kesbie.com
+
+Một trang duy nhất, gọn trong một màn hình: giới thiệu ngắn và danh sách link tới
+những trang web mình làm cho vui. Song ngữ VI/EN, dựng bằng [Astro](https://astro.build),
+không framework UI, không CSS ngoài.
+
+## Chạy local
 
 ```sh
-pnpm create astro@latest -- --template basics
+pnpm install
+pnpm dev      # http://localhost:4321
+pnpm build    # build tĩnh ra ./dist
+pnpm preview  # xem thử bản build
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## Cấu trúc
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/
+├── components/
+│   ├── HomePage.astro          toàn bộ nội dung trang (intro + danh sách link)
+│   ├── LanguageSwitcher.astro  chuyển VI/EN
+│   └── ThemeToggle.astro       chuyển sáng/tối
+├── i18n/
+│   ├── ui.ts                   toàn bộ chuỗi giao diện VI/EN
+│   ├── site.ts                 tên + domain (sửa thông tin cá nhân ở đây)
+│   └── utils.ts                helper locale, đường dẫn, translator
+├── layouts/Layout.astro        <head>, favicon, meta/SEO, hreflang, design tokens, script theme
+├── lib/sites.ts                DANH SÁCH LINK — thêm trang mới ở đây
+└── pages/
+    ├── index.astro             tiếng Việt  →  /
+    └── en/index.astro          tiếng Anh   →  /en/
+
+public/
+├── favicon.ico                 fallback 32x32
+├── favicon-16x16.png
+├── favicon-32x32.png
+├── favicon-48x48.png
+├── apple-touch-icon.png        180x180
+├── android-chrome-192x192.png  PWA icon
+├── android-chrome-512x512.png  PWA icon + og:image
+└── site.webmanifest
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Thêm một trang vào danh sách
 
-## 🧞 Commands
+Mở [`src/lib/sites.ts`](src/lib/sites.ts) và thêm một dòng:
 
-All commands are run from the root of the project, from a terminal:
+```ts
+export const sites: SiteLink[] = [
+	{ label: 'natty-zone.kesbie.com', url: 'https://natty-zone.kesbie.com' },
+	{ label: 'ten-trang.kesbie.com', url: 'https://ten-trang.kesbie.com' },
+];
+```
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `pnpm install`             | Installs dependencies                            |
-| `pnpm dev`             | Starts local dev server at `localhost:4321`      |
-| `pnpm build`           | Build your production site to `./dist/`          |
-| `pnpm preview`         | Preview your build locally, before deploying     |
-| `pnpm astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `pnpm astro -- --help` | Get help using the Astro CLI                     |
+`label` là chữ hiển thị, `url` là link mở ở tab mới. Không cần mô tả.
 
-## 👀 Want to learn more?
+## Thay thông tin cá nhân
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+- [`src/i18n/site.ts`](src/i18n/site.ts) — `name`, `nameEn`, `url`.
+- [`src/i18n/ui.ts`](src/i18n/ui.ts) — `hero.intro` (đoạn giới thiệu), `hero.role`,
+  tiêu đề và mô tả trang.
+
+## Ghi chú kỹ thuật
+
+- Song ngữ bằng i18n routing của Astro: `/` là tiếng Việt, `/en/` là tiếng Anh, có
+  `hreflang` + `x-default` và canonical riêng cho từng ngôn ngữ.
+- Theme sáng/tối: mặc định theo `prefers-color-scheme`, ghi nhớ lựa chọn trong
+  `localStorage`, áp dụng bằng script inline trong `<head>` nên không bị nháy màu.
+- Nội dung nằm gọn trong một màn hình (`min-height: 100dvh`), không có section dài.
+- Không có dependency ngoài `astro`.

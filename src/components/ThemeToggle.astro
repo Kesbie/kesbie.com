@@ -1,0 +1,123 @@
+---
+import { useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+
+<button
+	id="theme-toggle"
+	type="button"
+	class="theme-toggle"
+	aria-label={t('theme.toggle')}
+	title={t('theme.toggle')}
+	aria-pressed="false"
+>
+	<svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<circle cx="12" cy="12" r="4.2"></circle>
+		<path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.2 5.2l1.6 1.6M17.2 17.2l1.6 1.6M18.8 5.2l-1.6 1.6M6.8 17.2l-1.6 1.6"></path>
+	</svg>
+	<svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+		<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4a8.5 8.5 0 1 0 10.5 10.5Z"></path>
+	</svg>
+</button>
+
+<script is:inline>
+	(() => {
+		const button = document.getElementById('theme-toggle');
+		if (!(button instanceof HTMLButtonElement)) return;
+
+		const root = document.documentElement;
+
+		const sync = () => {
+			const theme = root.dataset.theme === 'dark' ? 'dark' : 'light';
+			button.dataset.theme = theme;
+			button.setAttribute('aria-pressed', String(theme === 'dark'));
+		};
+
+		button.addEventListener('click', () => {
+			const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+			root.dataset.theme = next;
+			try {
+				localStorage.setItem('theme', next);
+			} catch {
+				/* Private mode: keep the choice for this page only. */
+			}
+			sync();
+		});
+
+		// Follow the OS while the visitor has not made an explicit choice.
+		window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (event) => {
+			try {
+				if (localStorage.getItem('theme')) return;
+			} catch {
+				return;
+			}
+			root.dataset.theme = event.matches ? 'dark' : 'light';
+			sync();
+		});
+
+		sync();
+	})();
+</script>
+
+<style>
+	.theme-toggle {
+		display: inline-flex;
+		align-items: center;
+		justify-content: center;
+		width: 2rem;
+		height: 2rem;
+		padding: 0;
+		border: 0;
+		border-radius: 8px;
+		background: transparent;
+		color: var(--fg-muted);
+		cursor: pointer;
+		transition:
+			background-color 0.2s ease,
+			color 0.2s ease;
+	}
+
+	.theme-toggle:hover {
+		background: var(--bg-subtle);
+		color: var(--fg);
+	}
+
+	.icon {
+		width: 1.05rem;
+		height: 1.05rem;
+		fill: none;
+		stroke: currentColor;
+		stroke-width: 1.8;
+		stroke-linecap: round;
+	}
+
+	/* Dark mode shows a sun (click to go light), light mode shows a moon. */
+	.icon-sun {
+		display: none;
+	}
+
+	.theme-toggle[data-theme='dark'] .icon-sun {
+		display: block;
+	}
+
+	.theme-toggle[data-theme='dark'] .icon-moon {
+		display: none;
+	}
+
+	/* Before the script sets the attribute, follow the OS preference. */
+	@media (prefers-color-scheme: dark) {
+		.theme-toggle:not([data-theme='light']) .icon-sun {
+			display: block;
+		}
+
+		.theme-toggle:not([data-theme='light']) .icon-moon {
+			display: none;
+		}
+	}
+</style>

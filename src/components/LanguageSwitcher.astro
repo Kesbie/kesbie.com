@@ -1,0 +1,60 @@
+---
+import { getHomePath, languages, useTranslations, type Lang } from '../i18n/utils';
+
+interface Props {
+	lang: Lang;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const codes = Object.keys(languages) as Lang[];
+---
+
+<nav class="lang-switch" aria-label={t('lang.switch')}>
+	{
+		codes.map((code, index) => (
+			<>
+				{index > 0 && <span class="divider" aria-hidden="true">/</span>}
+				<a
+					href={getHomePath(code)}
+					hreflang={code}
+					lang={code}
+					title={languages[code]}
+					aria-current={code === lang ? 'true' : undefined}
+					class:list={['lang-link', { current: code === lang }]}
+				>
+					{code.toUpperCase()}
+				</a>
+			</>
+		))
+	}
+</nav>
+
+<style>
+	.lang-switch {
+		display: inline-flex;
+		align-items: center;
+		gap: 0.35rem;
+		font-size: 0.78rem;
+		font-weight: 600;
+		letter-spacing: 0.05em;
+	}
+
+	.lang-link {
+		color: var(--fg-muted);
+		text-decoration: none;
+		transition: color 0.2s ease;
+	}
+
+	.lang-link:hover {
+		color: var(--fg);
+	}
+
+	.lang-link.current {
+		color: var(--accent);
+	}
+
+	.divider {
+		color: var(--border);
+	}
+</style>
