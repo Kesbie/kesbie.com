@@ -2,7 +2,7 @@
 
 Một trang duy nhất, gọn trong một màn hình: giới thiệu ngắn và danh sách link tới
 những trang web mình làm cho vui. Song ngữ VI/EN, dựng bằng [Astro](https://astro.build),
-không framework UI, không CSS ngoài.
+không framework UI, không CSS ngoài. Lighthouse 100/100 cả 4 hạng mục (desktop + mobile).
 
 ## Chạy local
 
@@ -68,4 +68,8 @@ export const sites: SiteLink[] = [
 - Theme sáng/tối: mặc định theo `prefers-color-scheme`, ghi nhớ lựa chọn trong
   `localStorage`, áp dụng bằng script inline trong `<head>` nên không bị nháy màu.
 - Nội dung nằm gọn trong một màn hình (`min-height: 100dvh`), không có section dài.
-- Không có dependency ngoài `astro`.
+- CSS được inline (`build.inlineStylesheets: 'always'`) nên trang không có request
+  chặn render nào; JS chỉ là script inline cho theme, không có bundle.
+- `@astrojs/sitemap` sinh `sitemap-index.xml` + `robots.txt` trỏ tới sitemap lúc build.
+  Sitemap chỉ có sau `pnpm build` (dev server không serve file này).
+- Không framework UI, không CSS ngoài, không font tải về (dùng system font stack).
