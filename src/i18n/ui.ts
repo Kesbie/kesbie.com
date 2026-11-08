@@ -23,6 +23,9 @@ export const ui = {
 			'Trang web này để lưu trữ những trang web mình làm cho vui, hỗ trợ mình và các homies.',
 		'theme.toggle': 'Đổi giao diện sáng/tối',
 		'lang.switch': 'Ngôn ngữ',
+		'error.heading': 'Không tìm thấy trang',
+		'error.body': 'Đường dẫn này không tồn tại hoặc đã bị xoá.',
+		'error.back': 'Về trang chủ',
 	},
 	en: {
 		'site.title': 'Kesbie Nguyen',
@@ -35,6 +38,9 @@ export const ui = {
 			'This site is an archive of the little web projects I build for fun, to help myself and the homies.',
 		'theme.toggle': 'Toggle light/dark theme',
 		'lang.switch': 'Language',
+		'error.heading': 'Page not found',
+		'error.body': 'This path does not exist or has been removed.',
+		'error.back': 'Back to home',
 	},
 } as const;
 

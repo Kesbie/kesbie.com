@@ -1,0 +1,103 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getHomePath, useTranslations } from '../i18n/utils';
+
+// One static 404 for the whole site, so both locales are represented here.
+const tVi = useTranslations('vi');
+const tEn = useTranslations('en');
+const year = new Date().getFullYear();
+---
+
+<Layout lang="vi">
+	<main id="main" class="not-found">
+		<p class="code">404</p>
+
+		<h1>{tVi('error.heading')}</h1>
+		<p class="lede">{tVi('error.body')}</p>
+
+		<div class="links">
+			<a class="back" href={getHomePath('vi')}>{tVi('error.back')}</a>
+			<a class="back ghost" href={getHomePath('en')} hreflang="en" lang="en">
+				{tEn('error.back')}
+			</a>
+		</div>
+
+		<p class="en" lang="en">
+			<strong>{tEn('error.heading')}</strong> — {tEn('error.body')}
+		</p>
+	</main>
+</Layout>
+
+<style>
+	.not-found {
+		display: flex;
+		flex-direction: column;
+		align-items: flex-start;
+		justify-content: center;
+		min-height: 100dvh;
+		max-width: 34rem;
+		margin-inline: auto;
+		padding: clamp(1.25rem, 5vw, 3rem);
+	}
+
+	.code {
+		margin: 0;
+		font-size: 0.85rem;
+		font-weight: 600;
+		letter-spacing: 0.08em;
+		color: var(--accent);
+	}
+
+	h1 {
+		margin: 0.35rem 0 0;
+		font-size: clamp(1.6rem, 5vw, 2.1rem);
+		letter-spacing: -0.02em;
+	}
+
+	.lede {
+		margin: 0.6rem 0 0;
+		color: var(--fg-muted);
+	}
+
+	.links {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.6rem;
+		margin-top: 1.75rem;
+	}
+
+	.back {
+		padding: 0.6rem 1.1rem;
+		border: 1px solid var(--border);
+		border-radius: 10px;
+		background: var(--card);
+		font-size: 0.92rem;
+		font-weight: 550;
+		text-decoration: none;
+		transition:
+			border-color 0.2s ease,
+			background-color 0.2s ease;
+	}
+
+	.back:hover {
+		border-color: color-mix(in srgb, var(--accent) 45%, var(--border));
+		background: var(--bg-subtle);
+	}
+
+	.back.ghost {
+		background: transparent;
+		color: var(--fg-muted);
+	}
+
+	.en {
+		margin: 2.5rem 0 0;
+		padding-top: 1.25rem;
+		border-top: 1px solid var(--border);
+		font-size: 0.9rem;
+		color: var(--fg-muted);
+	}
+
+	.en strong {
+		color: var(--fg);
+	}
+</style>

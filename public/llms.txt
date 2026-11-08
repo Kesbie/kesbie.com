@@ -1,0 +1,20 @@
+# Kesbie Nguyễn
+
+> Personal site and link archive of Kesbie Nguyễn, a software engineer.
+
+This site is a single page. It collects the small web projects built for fun, for
+the author and friends. It is available in Vietnamese (default) and English.
+
+## Pages
+
+- [Vietnamese homepage](https://kesbie.com/): intro and the full list of sites
+- [English homepage](https://kesbie.com/en/): English version of the same page
+
+## Projects listed
+
+- [natty-zone.kesbie.com](https://natty-zone.kesbie.com): one of the small projects in the archive
+
+## Notes
+
+- Content is static HTML. No account, no tracking, no cookies.
+- Canonical host is https://kesbie.com
